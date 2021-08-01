@@ -3,13 +3,35 @@
 #include "include/Track.h"
 
 int main() {
-    auto track = new Track();
-    track->setName("Rammstein - Do riechst so gut");
-    track->setDuration(147);
-    track->setCreationDate(2005, 10, 14);
-    track->Play();
-    track->Stop();
-    delete track;
-    track = nullptr;
+    Player player;
+    do
+    {
+        std::cout << "Please enter the command:\n";
+        std::string buffer;
+        std::getline(std::cin, buffer);
+        if (buffer == "exit")
+        {
+            break;
+        }
+        else if (buffer == "play")
+        {
+            player.play();
+        }
+        else if (buffer == "stop")
+        {
+            player.stop();
+        }
+        else if (buffer == "pause")
+        {
+            player.pause();
+        }
+        else if (buffer == "next")
+        {
+            player.next();
+        }
+    } while (true);
+
+    std::cout << "Program is finished.\n";
+
     return 0;
 }

@@ -1,11 +1,20 @@
 #include "../include/Track.h"
 
+#include <utility>
+
 Track::Track() = default;
 
-Track::Track(std::string& trackName, int trackDuration) {
-    name = trackName;
+Track::Track(std::string trackName, int trackDuration) {
+    name = std::move(trackName);
     duration = trackDuration;
-    isPlayed = false;
+    state = STOPPED;
+}
+
+Track::Track(std::string trackName, int trackDuration, int year, int month, int day) {
+    name = std::move(trackName);
+    duration = trackDuration;
+    state = STOPPED;
+    setCreationDate(year, month, day);
 }
 
 void Track::setName(const std::string& newName) {
@@ -25,7 +34,15 @@ int Track::getDuration() const {
 }
 
 bool Track::getIsPlayed() const {
-    return isPlayed;
+    return state == PLAYING;
+}
+
+bool Track::getIsPaused() const {
+    return state == PAUSED;
+}
+
+bool Track::getIsStopped() const {
+    return state == STOPPED;
 }
 
 void Track::setCreationDate(const int year, const int month, const int day) {
@@ -38,23 +55,39 @@ void Track::setDuration(const int newDuration) {
     duration = newDuration;
 }
 
-void Track::Play() {
-    if (!isPlayed)
+void Track::play() {
+    if (state != PLAYING)
     {
-        isPlayed = true;
+        state = PLAYING;
         std::cout << "---------------------------------------\n";
         std::cout << "Track is played: " << name << "\n";
         std::cout << "Duration: " << duration << " seconds\n";
         std::cout << "Created: " << std::put_time(&creationDate, "%Y %b %d") << "\n";
     }
-
 }
 
-void Track::Stop() {
-    if (isPlayed)
+void Track::stop() {
+    if (state != STOPPED)
     {
-        isPlayed = false;
+        state = STOPPED;
         std::cout << "---------------------------------------\n";
         std::cout << "Track is stopped: " << name << "\n";
     }
 }
+
+void Track::pause() {
+    if (state != PAUSED)
+    {
+        state = PAUSED;
+        std::cout << "---------------------------------------\n";
+        std::cout << "Track is paused: " << name << "\n";
+    }
+}
+
+void Track::printTrackInfo() {
+    std::cout << "\t - " << name << ", "
+    << duration << " sec, "
+    << std::put_time(&creationDate, "%Y %b %d") << "\n";
+}
+
+
